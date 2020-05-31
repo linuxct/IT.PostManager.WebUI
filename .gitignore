@@ -1,0 +1,9 @@
+.idea/
+bin/
+obj/
+*.blob
+logs/*
+Logs/*
+*.min.js
+*.min.css
+.env

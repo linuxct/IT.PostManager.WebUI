@@ -1,0 +1,25 @@
+<div id="sectionErrors">
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger">
+            @Html.Raw(@TempData["error"])
+        </div>
+        TempData["error"] = null;
+    }
+    @if (TempData["infoMessage"] != null)
+    {
+        <div class="alert alert-info alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @Html.Raw(@TempData["infoMessage"])
+        </div>
+        TempData["infoMessage"] = null;
+    }
+    @if (TempData["successMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @Html.Raw(@TempData["successMessage"])
+        </div>
+        TempData["successMessage"] = null;
+    }
+</div>

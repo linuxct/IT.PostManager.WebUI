@@ -1,0 +1,92 @@
+@using System.Text
+@using IT.PostManager.Core.Logic
+@model PagesListViewModel
+@{
+    ViewData.TryAdd("Title", "Pages list");
+}
+
+<div class="text-center">
+    <h4 class="pb-3"></h4>
+    <table id="downloadList" class="table table-striped table-hover table-bordered responsive" style="width:100%">
+        <thead>
+        <tr>
+            <th scope="col">Article title</th>
+            <th scope="col">Current date to be placed</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Set date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var currentPage in Model.TelegraphContents.Pages)
+        {
+            var currentPageTitle = currentPage.Title.FromTitleWithDate().Item2;
+            if (currentPageTitle.Length > 80)
+            {
+                currentPageTitle = currentPageTitle.Substring(0, 80) + "…";
+            }
+            <tr>
+                <td>@currentPageTitle</td>
+                <td data-mustreplace="true" data-hashpath="@GetBase64String(currentPage.Path)">Loading . . . </td>
+                <td>
+                    <a href="@GetEditLink(currentPage.Path)" target="_self">
+                        <button type="button" class="btn btn-outline-primary">
+                            Edit
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="@GetChangeDateLink(currentPage.Path)" target="_self">
+                        <button type="button" class="btn btn-outline-primary">
+                            Set date
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Offset > 0)
+    {
+        <a href="@GetBackArrowUrl(Model)" target="_self">
+            <button type="button" class="btn btn-outline-primary">
+                ← Back @Model.DefaultPageSize
+            </button>
+        </a>
+    }
+    @if (Model.TelegraphContents.Pages.Count == Model.DefaultPageSize)
+    {
+        <a href="@GetNextArrowUrl(Model)" target="_self">
+            <button type="button" class="btn btn-outline-primary">
+                Next @Model.DefaultPageSize →
+            </button>
+        </a>
+    }
+</div>
+
+@functions {
+    private string GetChangeDateLink(string currentPagePath)
+    {
+        return Url.Action("PageDate", "Operation", new {hashpath = GetBase64String(currentPagePath)});
+    }
+
+    private string GetEditLink(string currentPagePath)
+    {
+        return Url.Action("ModifyPage", "Operation", new {hashpath = GetBase64String(currentPagePath)});
+    }
+
+    private string GetBackArrowUrl(PagesListViewModel model)
+    {
+        return Url.Action("Pages", "Operation", new {offset = model.Offset - model.DefaultPageSize});
+    }
+    
+    private string GetNextArrowUrl(PagesListViewModel model)
+    {
+        return Url.Action("Pages", "Operation", new {offset = model.Offset + model.DefaultPageSize});
+    }
+
+    private static string GetBase64String(string currentPagePath)
+    {
+        var plainTextBytes = Encoding.UTF8.GetBytes(currentPagePath);
+        return Convert.ToBase64String(plainTextBytes);
+    }
+}

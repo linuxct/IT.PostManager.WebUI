@@ -1,0 +1,21 @@
+@model PageDateViewModel
+@{
+    ViewData.TryAdd("Title", "Change post date");
+}
+
+<div class="text-center">
+    <h4>Please choose a date for post:</h4>
+    <h6>@Model.PostName</h6>
+    <br/>
+    @using (Html.BeginForm("StorePageDate", "Operation", FormMethod.Post, new {id = "pageDate"}))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <input name="date" class="datepicker" type="date" min="@DateTimeOffset.Now.Date.ToString("yyyy-MM-dd")" value="@Model.CurrentDateSet.Date.ToString("yyyy-MM-dd")">
+            <input name="hashpath" type="hidden" value="@Model.HashPath"/>
+        </div>
+        <input class="btn btn-outline-primary lockable" type="submit"/>  
+    }
+</div>
+
+

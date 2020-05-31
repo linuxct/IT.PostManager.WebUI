@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  it-postmanager-webui-pre:
+    image: postmanagerapp:latest
+    networks:
+      - traefik_itinternal
+    restart: unless-stopped
+    volumes:
+      - ${PWD}/IT.PostManager.WebUI/app.db:/app/app.db
+      - ${PWD}/Logs:/app/logs
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.it-postmanager-webui-pre.entryPoints=web-secure
+      - traefik.http.routers.it-postmanager-webui-pre.rule=Host(`itmanager-pre.linuxct.space`)
+      - traefik.http.routers.it-postmanager-webui-pre.tls=true
+      - traefik.http.services.it-postmanager-webui-pre.loadbalancer.server.port=80
+
+networks:
+  traefik_itinternal:
+    external: true

@@ -1,0 +1,26 @@
+@using IT.PostManager.Core.Logic
+@model ModifyPageViewModel
+@{
+    ViewData.TryAdd("Title", "Modify page contents");
+}
+
+<div class="text-center">
+    <h4>You are now editing the post:</h4>
+    <h6>@Model.TelegraphContents.Title.FromTitleWithDate().Item2</h6>
+    <br/>
+    @using (Html.BeginForm("UpdatePageContent", "Operation", FormMethod.Post, new {id = "pageUpdate"}))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <input type="hidden" name="hashpath" value="@Model.HashPath"/>
+            <textarea name="content" class="form-control" id="textArea" rows="20">@Model.TelegraphContents.Content.ToText()</textarea>
+          </div>
+        <input class="btn btn-outline-primary lockable" type="submit"/>  
+    }
+    
+    @using (Html.BeginForm("DeletePage", "Operation", FormMethod.Post, new {id = "pageDelete"}))
+    {
+        <input type="hidden" name="hashpath" value="@Model.HashPath"/>
+        <button class="btn btn-outline-danger" onclick="$('#pageDelete').submit()">Delete post</button>
+    }
+</div>

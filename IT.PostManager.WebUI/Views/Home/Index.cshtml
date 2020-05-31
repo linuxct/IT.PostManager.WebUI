@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData.TryAdd("Title", "Home page");
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome!</h1>
+    <br/>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a asp-controller="Operation" asp-action="Pages" target="_self">
+            <button type="button" class="btn btn-outline-primary">
+                Go to the control panel
+            </button>
+        </a>
+    }
+    else
+    {
+        <h5 class="display-4">Please login</h5>
+        <a asp-area="Identity" asp-page="/Account/Login" target="_self">
+            <button type="button" class="btn btn-outline-primary">
+                Login
+            </button>
+        </a>
+    }
+</div>
